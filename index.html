@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Presepe Vivente di Andonno</title>
+
+  <!-- MapLibre GL CSS -->
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <!-- Collegamento al tuo file CSS esterno -->
+  <link rel="stylesheet" href="style_presepe.css">
+</head>
+<body>
+
+  <!-- Header Mobile -->
+  <header>
+    <div>
+      <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri</h1>
+      <p id="headerSubtitle">Andonno 2026</p>
+      <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
+    </div>
+    <div style="display: flex; gap: 6px; align-items: center; flex-direction: column;">
+      <!-- Pulsante Cambio Lingua -->
+      <button id="langBtn" onclick="toggleLanguage()" class="filter-chip" style="padding: 4px 8px; font-weight: bold; font-size: 0.7rem;">🇬🇧 ENG</button>
+      <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
+    </div>
+  </header>
+
+  <!-- Filtri rapidi -->
+  <div class="filter-bar">
+    <button class="filter-chip active" onclick="filterMap('all', this)" data-i18n="filterAll">Tutte</button>
+    <button class="filter-chip" onclick="filterMap('informazioni', this)" data-i18n="filterInfo">Punti informativi</button>
+    <button class="filter-chip" onclick="filterMap('mestieri', this)" data-i18n="filterCrafts">Mestieri</button>
+    <button class="filter-chip" onclick="filterMap('ristoro', this)" data-i18n="filterFood">Ristoro</button>
+    <button class="filter-chip" onclick="filterMap('Parcheggi', this)" data-i18n="filterParking">Parcheggi</button>
+  </div>
+
+  <!-- Mappa -->
+  <div id="map"></div>
+
+  <!-- Pulsante GPS -->
+  <button class="gps-btn" onclick="centerOnAndonno()" title="Centra Mappa">
+    <h5 id="btnCenterText" style="font-size: 0.65rem; margin:0;">Centra mappa</h5>
+  </button>
+
+  <!-- Scheda Dettaglio Tappa (Basso) -->
+  <div id="infoSheet" class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="close-btn" onclick="closeSheet()">✕</button>
+    <span id="sheetCategory" style="font-size: 0.7rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">CATEGORIA</span>
+    <h2 id="sheetTitle" style="font-size: 1.15rem; margin: 4px 0 8px 0; color: #fff;">Titolo Tappa</h2>
+    <p id="sheetDesc" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">Descrizione della scena...</p>
+  </div>
+
+  <!-- MapLibre GL JS -->
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  <!-- Collegamento al tuo file JS esterno -->
+  <script src="script_presepe.js"></script>
+  <p class="copyright" data-i18n="copyright" style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+      © 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.
+    </p>
+</body>
+</html>
