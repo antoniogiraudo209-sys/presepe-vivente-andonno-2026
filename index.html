@@ -19,9 +19,13 @@
       <p id="headerSubtitle">Andonno 2026</p>
       <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
     </div>
-    <div style="display: flex; gap: 6px; align-items: center; flex-direction: column;">
-      <!-- Pulsante Cambio Lingua -->
-      <button id="langBtn" onclick="toggleLanguage()" class="filter-chip" style="padding: 4px 8px; font-weight: bold; font-size: 0.7rem;">🇬🇧 ENG</button>
+    <div style="display: flex; gap: 6px; align-items: flex-end; flex-direction: column;">
+      <!-- 3 Pulsanti Separati per la Lingua -->
+      <div style="display: flex; gap: 4px;">
+        <button class="lang-btn active" onclick="setLanguage('it', this)">🇮🇹 ITA</button>
+        <button class="lang-btn" onclick="setLanguage('en', this)">🇬🇧 ENG</button>
+        <button class="lang-btn" onclick="setLanguage('adn', this)">🗣️ DIALETTO</button>
+      </div>
       <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
     </div>
   </header>
@@ -50,14 +54,14 @@
     <span id="sheetCategory" style="font-size: 0.7rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">CATEGORIA</span>
     <h2 id="sheetTitle" style="font-size: 1.15rem; margin: 4px 0 8px 0; color: #fff;">Titolo Tappa</h2>
     <p id="sheetDesc" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">Descrizione della scena...</p>
+    <p class="copyright" data-i18n="copyright" style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+      © 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.
+    </p>
   </div>
 
   <!-- MapLibre GL JS -->
   <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
   <!-- Collegamento al tuo file JS esterno -->
   <script src="script_presepe.js"></script>
-  <p class="copyright" data-i18n="copyright" style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
-      © 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.
-    </p>
 </body>
 </html>
