@@ -12,23 +12,35 @@
 </head>
 <body>
 
+  <!-- Overlay per l'effetto neve grafico -->
+  <div class="snow-container" aria-hidden="true">
+    <div class="snow"></div>
+  </div>
+
   <!-- Header Mobile -->
-  <header>
-    <div>
-      <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri</h1>
-      <p id="headerSubtitle">Andonno 2026</p>
-      <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
+ <header>
+  <div>
+    <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri</h1>
+    <p id="headerSubtitle">Andonno 2026</p>
+    <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
+  </div>
+  <div style="display: flex; gap: 6px; align-items: flex-end; flex-direction: column;">
+    <!-- 3 Pulsanti Separati per la Lingua -->
+    <div style="display: flex; gap: 4px;">
+      <button class="lang-btn active" onclick="setLanguage('it', this)">🇮🇹 ITA</button>
+      <button class="lang-btn" onclick="setLanguage('en', this)">🇬🇧 ENG</button>
+      <button class="lang-btn" onclick="setLanguage('adn', this)">🗣️ DIALETTO</button>
     </div>
-    <div style="display: flex; gap: 6px; align-items: flex-end; flex-direction: column;">
-      <!-- 3 Pulsanti Separati per la Lingua -->
-      <div style="display: flex; gap: 4px;">
-        <button class="lang-btn active" onclick="setLanguage('it', this)">🇮🇹 ITA</button>
-        <button class="lang-btn" onclick="setLanguage('en', this)">🇬🇧 ENG</button>
-        <button class="lang-btn" onclick="setLanguage('adn', this)">🗣️ DIALETTO</button>
-      </div>
+    
+    <div style="display: flex; gap: 4px; align-items: center;">
+      <!-- Pulsante Condividi App -->
+      <button onclick="shareApp()" class="share-btn" title="Condividi la mappa">
+        📲 <span data-i18n="btnShare">Condividi App </span>
+      </button>
       <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
     </div>
-  </header>
+  </div>
+</header>
 
   <!-- Filtri rapidi -->
   <div class="filter-bar">

@@ -6,7 +6,7 @@ let currentLang = 'it'; // Lingua iniziale
 // Testi interfaccia tradotti per le 3 lingue (ITA, ENG, ADN)
 const translations = {
   it: {
-    headerTitle: "Presepe Vivente e Antichi Mestieri",
+    headerTitle: "Presepe Vivente & Antichi Mestieri",
     headerEdition: "N Edizione",
     filterAll: "Tutte",
     filterInfo: "Punti informativi",
@@ -15,7 +15,8 @@ const translations = {
     filterParking: "Parcheggi",
     btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emissioni 🍃",
-    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati."
+    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.",
+    btnShare: "Condividi app"
   },
   en: {
     headerTitle: "Living Nativity & Ancient Crafts",
@@ -27,7 +28,8 @@ const translations = {
     filterParking: "Parking",
     badgeEco: "Zero Paper Zero Emissions 🍃",
     btnCenter: "Center map",
-    copyright: "© 2026 Andonno Living Nativity. All rights reserved."
+    copyright: "© 2026 Andonno Living Nativity. All rights reserved.",
+    btnShare: "Share app"
   },
   adn: {
     headerTitle: "Presepe Vivent & Antics Mestiers",
@@ -39,7 +41,8 @@ const translations = {
     filterParking: "Parchegi",
     btnCenter: "Centr map",
     badgeEco: "Zero Carta Zero Emisiun 🍃",
-    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati."
+    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.",
+    btnShare: "Condivi"
   }
 };
 
@@ -233,8 +236,31 @@ function setLanguage(lang, btn) {
     const tappaCorrente = tappe.find(t => t.id === selectedTappaId);
     if (tappaCorrente) openSheet(tappaCorrente);
   }
+  const shareText = document.querySelector('[data-i18n="btnShare"]');
+  if (shareText) shareText.innerText = translations[currentLang].btnShare;
 }
+// Funzione che condivide l'app
+function shareApp() {
+  const shareData = {
+    title: 'Presepe Vivente di Andonno 2026',
+    text: 'Guarda la mappa interattiva delle tappe e degli antichi mestieri del Presepe Vivente di Andonno!',
+    url: window.location.href // Prende in automatico l'URL attuale del tuo sito GitHub Pages
+  };
 
+  // Se il browser supporta la condivisione nativa da smartphone (iOS / Android)
+  if (navigator.share) {
+    navigator.share(shareData).catch((err) => {
+      console.log('Condividi annullato', err);
+    });
+  } else {
+    // Fallback per computer o browser non supportati: copia l'URL negli appunti
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Link della mappa copiato negli appunti! ');
+    }).catch(err => {
+      console.error('Errore durante la copia del link', err);
+    });
+  }
+}
 map.on('load', () => {
   // Nasconde tutte le etichette di testo dei luoghi (compresa la scritta "Andonno")
   const layers = map.getStyle().layers;

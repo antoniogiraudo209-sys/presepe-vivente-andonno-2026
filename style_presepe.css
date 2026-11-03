@@ -194,3 +194,82 @@ header p {
   color: #000;
   border-color: var(--accent);
 }
+
+/* Container per la neve che copre lo schermo sopra la mappa */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* FONDAMENTALE: permette di cliccare la mappa sottostante */
+  z-index: 300; /* Sta sopra la mappa ma sotto l'header e la scheda info */
+  overflow: hidden;
+}
+
+/* Effetto Fiocchi di Neve con Gradienti CSS */
+.snow, .snow::after, .snow::before {
+  content: '';
+  position: absolute;
+  top: -650px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(4px 4px at 100px 50px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(6px 6px at 200px 150px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(3px 3px at 300px 250px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(5px 5px at 400px 350px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(4px 4px at 500px 100px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(6px 6px at 50px 300px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(3px 3px at 150px 450px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(5px 5px at 350px 550px, rgba(255, 255, 255, 0.65), transparent);
+  background-size: 650px 650px;
+  animation: snowAnimation 12s linear infinite;
+}
+
+/* Effetto neve sullo sfondo*/
+.snow::after {
+  margin-left: -250px;
+  opacity: 0.7;
+  animation-duration: 18s;
+  animation-direction: reverse;
+}
+
+.snow::before {
+  margin-left: -90px;
+  opacity: 0.5;
+  animation-duration: 22s;
+}
+
+/* Animazione della caduta dall'alto verso il basso */
+@keyframes snowAnimation {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(650px);
+  }
+}
+
+/* Pulsante Condividi */
+.share-btn {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 3px 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.share-btn:active {
+  transform: scale(0.95);
+}
+.share-btn:hover{
+  background-color: lightseagreen;
+}
