@@ -17,38 +17,65 @@
     <div class="snow"></div>
   </div>
 
-  <!-- Header Mobile -->
- <header>
-  <div>
-    <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri</h1>
-    <p id="headerSubtitle">Andonno 2026</p>
-    <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
-  </div>
-  <div style="display: flex; gap: 6px; align-items: flex-end; flex-direction: column;">
-    <!-- 3 Pulsanti Separati per la Lingua -->
-    <div style="display: flex; gap: 4px;">
-      <button class="lang-btn active" onclick="setLanguage('it', this)">🇮🇹 ITA</button>
-      <button class="lang-btn" onclick="setLanguage('en', this)">🇬🇧 ENG</button>
-      <button class="lang-btn" onclick="setLanguage('adn', this)">🗣️ DIALETTO</button>
-    </div>
-    
-    <div style="display: flex; gap: 4px; align-items: center;">
-      <!-- Pulsante Condividi App -->
-      <button onclick="shareApp()" class="share-btn" title="Condividi la mappa">
-        📲 <span data-i18n="btnShare">Condividi App </span>
-      </button>
-      <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
-    </div>
-  </div>
-</header>
+  <!-- Banner Informativo Cookie e Note di Utilizzo (Pop-up Iniziale) -->
+  <div id="welcomeModal" class="welcome-modal">
+    <div class="welcome-content">
+      <div class="sheet-handle"></div>
+      <h2 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--accent);">🍪 Informazioni sui cookie e Privacy</h2>
+      
+      <p style="font-size: 0.8rem; color: var(--text); line-height: 1.45; margin-bottom: 10px;">
+        Benvenuti al Presepe di Andonno 2026! 🗺️ <br><br>
+        Per offrirti un'esperienza di navigazione fluida sulla mappa, questo sito fa uso unicamente di cookie tecnici necessari al funzionamento della pagina. <br><br>
+        Teniamo a precisare che si tratta di un progetto amatoriale, indipendente e non ufficiale, slegato dall'organizzazione ufficiale dell'evento. <br><br>
+        Non effettuiamo alcuna profilazione commerciale. <br>
+        Non vengono tracciati dati personali né inseriti banner pubblicitari.
+        <br><br>
+        Cliccando su "Accetta e Continua", accetti i termini e accedi subito alla mappa.
+      </p>
 
-  <!-- Filtri rapidi -->
+      <div style="display: flex; gap: 8px; flex-direction: column;">
+        <button onclick="closeWelcomeModal()" class="filter-chip active" style="width: 100%; text-align: center; justify-content: center; padding: 10px; font-weight: bold; cursor: pointer;">
+          Accetta e Continua 🗺️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Mobile -->
+  <header>
+    <div>
+      <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri</h1>
+      <p id="headerSubtitle">Andonno 2026</p>
+      <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
+    </div>
+    <div style="display: flex; gap: 6px; align-items: flex-end; flex-direction: column;">
+      <!-- 3 Pulsanti Separati per la Lingua -->
+      <div style="display: flex; gap: 4px;">
+        <button class="lang-btn active" onclick="setLanguage('it', this)">🇮🇹 ITA</button>
+        <button class="lang-btn" onclick="setLanguage('en', this)">🇬🇧 ENG</button>
+        <button class="lang-btn" onclick="setLanguage('adn', this)">🗣️ DIALETTO</button>
+      </div>
+      
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <!-- Pulsante Condividi App -->
+        <button onclick="shareApp()" class="share-btn">📲 <span data-i18n="btnShare">Condividi</span></button>
+        <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filtri rapidi + Badge Contatore Visitate -->
   <div class="filter-bar">
     <button class="filter-chip active" onclick="filterMap('all', this)" data-i18n="filterAll">Tutte</button>
     <button class="filter-chip" onclick="filterMap('informazioni', this)" data-i18n="filterInfo">Punti informativi</button>
     <button class="filter-chip" onclick="filterMap('mestieri', this)" data-i18n="filterCrafts">Mestieri</button>
    <!--<button class="filter-chip" onclick="filterMap('ristoro', this)" data-i18n="filterFood">Ristoro</button>--> 
     <button class="filter-chip" onclick="filterMap('Parcheggi', this)" data-i18n="filterParking">Parcheggi</button>
+    
+    <!-- Badge Contatore Progressi -->
+    <div id="progressBadge" class="filter-chip" style="background: rgba(1, 17, 8, 0.2); border-color: #011007; color: #ebebeb; font-weight: bold; pointer-events: none;">
+      🏆 Tappe visitate: <span id="visitedCount">0</span>/10
+    </div>
   </div>
 
   <!-- Mappa -->
@@ -66,8 +93,14 @@
     <span id="sheetCategory" style="font-size: 0.7rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">CATEGORIA</span>
     <h2 id="sheetTitle" style="font-size: 1.15rem; margin: 4px 0 8px 0; color: #fff;">Titolo Tappa</h2>
     <p id="sheetDesc" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">Descrizione della scena...</p>
+    
+    <!-- Pulsante per spuntare la tappa come visitata -->
+    <button id="btnToggleVisit" onclick="toggleTappaVisitata()" class="filter-chip" style="width: 100%; margin-top: 12px; padding: 10px; font-weight: bold; text-align: center; justify-content: center; cursor: pointer;">
+      ⚪ Segna come visitata
+    </button>
+
     <p class="copyright" data-i18n="copyright" style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
-      © 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.
+      © 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.<br>
     </p>
   </div>
 

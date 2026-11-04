@@ -2,11 +2,12 @@ const lngAndonno = 7.429859619979775;
 const latAndonno = 44.29575799300668;
 
 let currentLang = 'it'; // Lingua iniziale
+let visitedTappe = []; // Array per salvare gli ID delle tappe visitate
 
 // Testi interfaccia tradotti per le 3 lingue (ITA, ENG, ADN)
 const translations = {
   it: {
-    headerTitle: "Presepe Vivente & Antichi Mestieri",
+    headerTitle: "Presepe Vivente e Antichi Mestieri",
     headerEdition: "N Edizione",
     filterAll: "Tutte",
     filterInfo: "Punti informativi",
@@ -15,8 +16,8 @@ const translations = {
     filterParking: "Parcheggi",
     btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emissioni 🍃",
-    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.",
-    btnShare: "Condividi app"
+    btnShare: "Condividi",
+    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati."
   },
   en: {
     headerTitle: "Living Nativity & Ancient Crafts",
@@ -28,8 +29,8 @@ const translations = {
     filterParking: "Parking",
     badgeEco: "Zero Paper Zero Emissions 🍃",
     btnCenter: "Center map",
-    copyright: "© 2026 Andonno Living Nativity. All rights reserved.",
-    btnShare: "Share app"
+    btnShare: "Share",
+    copyright: "© 2026 Andonno Living Nativity. All rights reserved."
   },
   adn: {
     headerTitle: "Presepe Vivent & Antics Mestiers",
@@ -39,10 +40,10 @@ const translations = {
     filterCrafts: "Mestiers",
     filterFood: "Ristoru",
     filterParking: "Parchegi",
-    btnCenter: "Centr map",
+    btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emisiun 🍃",
-    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati.",
-    btnShare: "Condivi"
+    btnShare: "Manda",
+    copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati."
   }
 };
 
@@ -154,8 +155,11 @@ function renderMarkers(filter = 'all') {
     if (filter !== 'all' && tappa.categoria !== filter) return;
 
     const el = document.createElement('div');
-    el.className = 'map-pin';
-    el.innerText = tappa.numero;
+    const isVisited = visitedTappe.includes(tappa.id);
+    
+    // Assegna lo stile corretto a seconda se è visitata o meno
+    el.className = `map-pin ${isVisited ? 'visited' : ''}`;
+    el.innerText = isVisited ? '✓' : tappa.numero;
 
     el.addEventListener('click', () => {
       selectedTappaId = tappa.id;
@@ -176,6 +180,21 @@ function openSheet(tappa) {
   document.getElementById('sheetCategory').innerText = data.categoriaLabel;
   document.getElementById('sheetTitle').innerText = `${tappa.numero}. ${data.titolo}`;
   document.getElementById('sheetDesc').innerText = data.desc;
+  
+  // Aggiorna la grafica del pulsante di spunta visita
+  const btn = document.getElementById('btnToggleVisit');
+  if (btn) {
+    if (visitedTappe.includes(tappa.id)) {
+      btn.innerText = "✅ Tappa Visitata (Clicca per rimuovere)";
+      btn.style.background = "#2ecc71";
+      btn.style.color = "#000";
+    } else {
+      btn.innerText = "⚪ Segna come visitata";
+      btn.style.background = "var(--card-bg)";
+      btn.style.color = "var(--text)";
+    }
+  }
+
   document.getElementById('infoSheet').classList.add('open');
 }
 
@@ -185,15 +204,82 @@ function closeSheet() {
 }
 
 function filterMap(cat, btn) {
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    if(!c.id.includes('progressBadge')) c.classList.remove('active');
+  });
   btn.classList.add('active');
   renderMarkers(cat);
   closeSheet();
 }
 
 function centerOnAndonno() {
-  map.flyTo({ center: [lngAndonno, latAndonno], zoom: 16.0, speed: 1 });
+  map.flyTo({ center: [lngAndonno, latAndonno], zoom: 16.3, speed: 1 });
   closeSheet();
+}
+
+// Funzione per chiudere la scheda di benvenuto iniziale
+function closeWelcomeModal() {
+  const modal = document.getElementById('welcomeModal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+}
+
+// Funzione di condivisione nativa o copia link
+function shareApp() {
+  const shareData = {
+    title: 'Presepe Vivente di Andonno',
+    text: 'Guarda la mappa interattiva delle tappe e degli antichi mestieri del Presepe Vivente di Andonno!',
+    url: window.location.href
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch((err) => {
+      console.log('Condivisione annullata', err);
+    });
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Link della mappa copiato negli appunti! Incollalo pure su WhatsApp.');
+    }).catch(err => {
+      console.error('Errore durante la copia del link', err);
+    });
+  }
+}
+
+// Funzione per spuntare/rimuovere la tappa visitata
+function toggleTappaVisitata() {
+  if (selectedTappaId === null) return;
+
+  const index = visitedTappe.indexOf(selectedTappaId);
+  if (index > -1) {
+    visitedTappe.splice(index, 1);
+  } else {
+    visitedTappe.push(selectedTappaId);
+  }
+
+  // Conta solo i mestieri visitati
+  const visitedMestieri = visitedTappe.filter(id => {
+    const t = tappe.find(item => item.id === id);
+    return t && t.categoria === 'mestieri';
+  }).length;
+
+  document.getElementById('visitedCount').innerText = visitedMestieri;
+
+  // Ridisegna i marker mantenendo il filtro attivo corrente
+  const activeChip = document.querySelector('.filter-chip.active');
+  let currentFilter = 'all';
+  if (activeChip) {
+    const onclickAttr = activeChip.getAttribute('onclick');
+    if (onclickAttr) {
+      const match = onclickAttr.match(/'([^']+)'/);
+      if (match) currentFilter = match[1];
+    }
+  }
+  renderMarkers(currentFilter);
+
+  // Rinfresca la scheda aperta
+  const tappaCorrente = tappe.find(t => t.id === selectedTappaId);
+  if (tappaCorrente) openSheet(tappaCorrente);
 }
 
 // Funzione per impostare direttamente la lingua scelta con i 3 pulsanti
@@ -208,11 +294,14 @@ function setLanguage(lang, btn) {
   document.querySelector('[data-i18n="headerTitle"]').innerText = translations[currentLang].headerTitle;
   document.querySelector('[data-i18n="headerEdition"]').innerText = translations[currentLang].headerEdition;
   document.querySelector('[data-i18n="badgeEco"]').innerText = translations[currentLang].badgeEco;
+  
+  const shareLabel = document.querySelector('[data-i18n="btnShare"]');
+  if (shareLabel) shareLabel.innerText = translations[currentLang].btnShare;
 
   // Traduce il pulsante centra mappa
   document.getElementById('btnCenterText').innerText = translations[currentLang].btnCenter;
 
-  // Traduce i vari filtri in modo sicuro
+  // Traduce i filtri
   const fAll = document.querySelector('[data-i18n="filterAll"]');
   if (fAll) fAll.innerText = translations[currentLang].filterAll;
 
@@ -236,31 +325,8 @@ function setLanguage(lang, btn) {
     const tappaCorrente = tappe.find(t => t.id === selectedTappaId);
     if (tappaCorrente) openSheet(tappaCorrente);
   }
-  const shareText = document.querySelector('[data-i18n="btnShare"]');
-  if (shareText) shareText.innerText = translations[currentLang].btnShare;
 }
-// Funzione che condivide l'app
-function shareApp() {
-  const shareData = {
-    title: 'Presepe Vivente di Andonno 2026',
-    text: 'Guarda la mappa interattiva delle tappe e degli antichi mestieri del Presepe Vivente di Andonno!',
-    url: window.location.href // Prende in automatico l'URL attuale del tuo sito GitHub Pages
-  };
 
-  // Se il browser supporta la condivisione nativa da smartphone (iOS / Android)
-  if (navigator.share) {
-    navigator.share(shareData).catch((err) => {
-      console.log('Condividi annullato', err);
-    });
-  } else {
-    // Fallback per computer o browser non supportati: copia l'URL negli appunti
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('Link della mappa copiato negli appunti! ');
-    }).catch(err => {
-      console.error('Errore durante la copia del link', err);
-    });
-  }
-}
 map.on('load', () => {
   // Nasconde tutte le etichette di testo dei luoghi (compresa la scritta "Andonno")
   const layers = map.getStyle().layers;
