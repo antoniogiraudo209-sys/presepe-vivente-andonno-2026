@@ -17,6 +17,8 @@ const translations = {
     btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emissioni 🍃",
     btnShare: "Condividi",
+    btnVisited: "✅ Tappa Visitata (Clicca per rimuovere)",
+    btnNotVisited: "⚪ Segna come visitata",
     copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati."
   },
   en: {
@@ -30,6 +32,8 @@ const translations = {
     badgeEco: "Zero Paper Zero Emissions 🍃",
     btnCenter: "Center map",
     btnShare: "Share",
+    btnVisited: "✅ Visited Stop (Click to remove)",
+    btnNotVisited: "⚪ Mark as visited",
     copyright: "© 2026 Andonno Living Nativity. All rights reserved."
   },
   adn: {
@@ -43,6 +47,8 @@ const translations = {
     btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emisiun 🍃",
     btnShare: "Manda",
+    btnVisited: "✅ Tapa Visitada (Stampa per gavie)",
+    btnNotVisited: "⚪ Marca com visitada",
     copyright: "© 2026 Presepe Vivente di Andonno. Tutti i diritti riservati."
   }
 };
@@ -139,7 +145,7 @@ const map = new maplibregl.Map({
   container: 'map',
   style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
   center: [lngAndonno, latAndonno],
-  zoom: 18,
+  zoom: 16.3,
   pitch: 0,
   attributionControl: false
 });
@@ -157,7 +163,6 @@ function renderMarkers(filter = 'all') {
     const el = document.createElement('div');
     const isVisited = visitedTappe.includes(tappa.id);
     
-    // Assegna lo stile corretto a seconda se è visitata o meno
     el.className = `map-pin ${isVisited ? 'visited' : ''}`;
     el.innerText = isVisited ? '✓' : tappa.numero;
 
@@ -181,15 +186,17 @@ function openSheet(tappa) {
   document.getElementById('sheetTitle').innerText = `${tappa.numero}. ${data.titolo}`;
   document.getElementById('sheetDesc').innerText = data.desc;
   
-  // Aggiorna la grafica del pulsante di spunta visita
+  // Aggiorna dinamicamente testo e colore del pulsante di spunta nella lingua attiva
   const btn = document.getElementById('btnToggleVisit');
+  const t = translations[currentLang] || translations.it;
+
   if (btn) {
     if (visitedTappe.includes(tappa.id)) {
-      btn.innerText = "✅ Tappa Visitata (Clicca per rimuovere)";
+      btn.innerText = t.btnVisited;
       btn.style.background = "#2ecc71";
       btn.style.color = "#000";
     } else {
-      btn.innerText = "⚪ Segna come visitata";
+      btn.innerText = t.btnNotVisited;
       btn.style.background = "var(--card-bg)";
       btn.style.color = "var(--text)";
     }
@@ -217,7 +224,6 @@ function centerOnAndonno() {
   closeSheet();
 }
 
-// Funzione per chiudere la scheda di benvenuto iniziale
 function closeWelcomeModal() {
   const modal = document.getElementById('welcomeModal');
   if (modal) {
@@ -225,7 +231,6 @@ function closeWelcomeModal() {
   }
 }
 
-// Funzione di condivisione nativa o copia link
 function shareApp() {
   const shareData = {
     title: 'Presepe Vivente di Andonno',
@@ -239,14 +244,13 @@ function shareApp() {
     });
   } else {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('Link della mappa copiato negli appunti! Incollalo pure su WhatsApp.');
+      alert('Link della mappa copiato negli appunti!');
     }).catch(err => {
       console.error('Errore durante la copia del link', err);
     });
   }
 }
 
-// Funzione per spuntare/rimuovere la tappa visitata
 function toggleTappaVisitata() {
   if (selectedTappaId === null) return;
 
@@ -257,7 +261,6 @@ function toggleTappaVisitata() {
     visitedTappe.push(selectedTappaId);
   }
 
-  // Conta solo i mestieri visitati
   const visitedMestieri = visitedTappe.filter(id => {
     const t = tappe.find(item => item.id === id);
     return t && t.categoria === 'mestieri';
@@ -265,7 +268,6 @@ function toggleTappaVisitata() {
 
   document.getElementById('visitedCount').innerText = visitedMestieri;
 
-  // Ridisegna i marker mantenendo il filtro attivo corrente
   const activeChip = document.querySelector('.filter-chip.active');
   let currentFilter = 'all';
   if (activeChip) {
@@ -277,20 +279,16 @@ function toggleTappaVisitata() {
   }
   renderMarkers(currentFilter);
 
-  // Rinfresca la scheda aperta
   const tappaCorrente = tappe.find(t => t.id === selectedTappaId);
   if (tappaCorrente) openSheet(tappaCorrente);
 }
 
-// Funzione per impostare direttamente la lingua scelta con i 3 pulsanti
 function setLanguage(lang, btn) {
   currentLang = lang;
 
-  // Aggiorna lo stile attivo dei 3 pulsanti
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
-  // Traduce i testi dell'header
   document.querySelector('[data-i18n="headerTitle"]').innerText = translations[currentLang].headerTitle;
   document.querySelector('[data-i18n="headerEdition"]').innerText = translations[currentLang].headerEdition;
   document.querySelector('[data-i18n="badgeEco"]').innerText = translations[currentLang].badgeEco;
@@ -298,10 +296,8 @@ function setLanguage(lang, btn) {
   const shareLabel = document.querySelector('[data-i18n="btnShare"]');
   if (shareLabel) shareLabel.innerText = translations[currentLang].btnShare;
 
-  // Traduce il pulsante centra mappa
   document.getElementById('btnCenterText').innerText = translations[currentLang].btnCenter;
 
-  // Traduce i filtri
   const fAll = document.querySelector('[data-i18n="filterAll"]');
   if (fAll) fAll.innerText = translations[currentLang].filterAll;
 
@@ -320,7 +316,6 @@ function setLanguage(lang, btn) {
   const copy = document.querySelector('[data-i18n="copyright"]');
   if (copy) copy.innerText = translations[currentLang].copyright;
 
-  // Se c'è una scheda aperta, la aggiorna subito nella nuova lingua
   if (selectedTappaId !== null) {
     const tappaCorrente = tappe.find(t => t.id === selectedTappaId);
     if (tappaCorrente) openSheet(tappaCorrente);
@@ -328,7 +323,6 @@ function setLanguage(lang, btn) {
 }
 
 map.on('load', () => {
-  // Nasconde tutte le etichette di testo dei luoghi (compresa la scritta "Andonno")
   const layers = map.getStyle().layers;
   layers.forEach(layer => {
     if (layer.type === 'symbol' && (layer.id.includes('place') || layer.id.includes('label'))) {

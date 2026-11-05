@@ -57,6 +57,10 @@
       </div>
       
       <div style="display: flex; gap: 6px; align-items: center;">
+        <!-- Badge Contatore Progressi -->
+    <div id="progressBadge" class="filter-chip" style="background: rgba(1, 17, 8, 0.2); border-color: #011007; color: #ebebeb; font-weight: bold; pointer-events: none;">
+      🏆 Tappe visitate: <span id="visitedCount">0</span>/10
+    </div>
         <!-- Pulsante Condividi App -->
         <button onclick="shareApp()" class="share-btn">📲 <span data-i18n="btnShare">Condividi</span></button>
         <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
@@ -71,11 +75,7 @@
     <button class="filter-chip" onclick="filterMap('mestieri', this)" data-i18n="filterCrafts">Mestieri</button>
    <!--<button class="filter-chip" onclick="filterMap('ristoro', this)" data-i18n="filterFood">Ristoro</button>--> 
     <button class="filter-chip" onclick="filterMap('Parcheggi', this)" data-i18n="filterParking">Parcheggi</button>
-    
-    <!-- Badge Contatore Progressi -->
-    <div id="progressBadge" class="filter-chip" style="background: rgba(1, 17, 8, 0.2); border-color: #011007; color: #ebebeb; font-weight: bold; pointer-events: none;">
-      🏆 Tappe visitate: <span id="visitedCount">0</span>/10
-    </div>
+
   </div>
 
   <!-- Mappa -->
