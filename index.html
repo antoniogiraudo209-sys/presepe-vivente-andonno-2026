@@ -44,7 +44,7 @@
   <!-- Header Mobile -->
   <header>
     <div>
-      <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri</h1>
+      <h1 id="headerTitle" data-i18n="headerTitle">Presepe Vivente e Antichi Mestieri </h1>
       <p id="headerSubtitle">Andonno 2026</p>
       <p id="headerEdition" data-i18n="headerEdition">N Edizione</p>
     </div>
@@ -55,15 +55,12 @@
         <button class="lang-btn" onclick="setLanguage('en', this)">🇬🇧 ENG</button>
         <button class="lang-btn" onclick="setLanguage('adn', this)">🗣️ DIALETTO</button>
       </div>
-      
-      <div style="display: flex; gap: 6px; align-items: center;">
+      <div id="progressBadge" class="filter-chip" style="background: rgba(1, 17, 8, 0.2); border-color: #011007; color: #ebebeb; font-weight: bold; pointer-events: none;">
+  🏆 <span data-i18n="badgeProgress">Tappe visitate</span>: <span id="visitedCount">0</span>/10
+      </div>  
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button onclick="shareApp()" class="share-btn">📲 <span data-i18n="btnShare">Condividi</span></button>
         <!-- Badge Contatore Progressi -->
-    <div id="progressBadge" class="filter-chip" style="background: rgba(1, 17, 8, 0.2); border-color: #011007; color: #ebebeb; font-weight: bold; pointer-events: none;">
-      🏆 Tappe visitate: <span id="visitedCount">0</span>/10
-    </div>
-        <!-- Pulsante Condividi App -->
-        <button onclick="shareApp()" class="share-btn">📲 <span data-i18n="btnShare">Condividi</span></button>
-        <div class="badge-eco" data-i18n="badgeEco">Zero Carta Zero Emissioni 🍃</div>
       </div>
     </div>
   </header>
@@ -75,7 +72,6 @@
     <button class="filter-chip" onclick="filterMap('mestieri', this)" data-i18n="filterCrafts">Mestieri</button>
    <!--<button class="filter-chip" onclick="filterMap('ristoro', this)" data-i18n="filterFood">Ristoro</button>--> 
     <button class="filter-chip" onclick="filterMap('Parcheggi', this)" data-i18n="filterParking">Parcheggi</button>
-
   </div>
 
   <!-- Mappa -->

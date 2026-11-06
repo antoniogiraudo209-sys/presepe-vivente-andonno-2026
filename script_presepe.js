@@ -16,6 +16,7 @@ const translations = {
     filterParking: "Parcheggi",
     btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emissioni 🍃",
+    badgeProgress: "Tappe visitate",
     btnShare: "Condividi",
     btnVisited: "✅ Tappa Visitata (Clicca per rimuovere)",
     btnNotVisited: "⚪ Segna come visitata",
@@ -31,6 +32,7 @@ const translations = {
     filterParking: "Parking",
     badgeEco: "Zero Paper Zero Emissions 🍃",
     btnCenter: "Center map",
+    badgeProgress: "Visited stops",
     btnShare: "Share",
     btnVisited: "✅ Visited Stop (Click to remove)",
     btnNotVisited: "⚪ Mark as visited",
@@ -46,6 +48,7 @@ const translations = {
     filterParking: "Parchegi",
     btnCenter: "Centra mappa",
     badgeEco: "Zero Carta Zero Emisiun 🍃",
+    badgeProgress: "Tape visità",
     btnShare: "Manda",
     btnVisited: "✅ Tapa Visitada (Stampa per gavie)",
     btnNotVisited: "⚪ Marca com visitada",
@@ -186,7 +189,6 @@ function openSheet(tappa) {
   document.getElementById('sheetTitle').innerText = `${tappa.numero}. ${data.titolo}`;
   document.getElementById('sheetDesc').innerText = data.desc;
   
-  // Aggiorna dinamicamente testo e colore del pulsante di spunta nella lingua attiva
   const btn = document.getElementById('btnToggleVisit');
   const t = translations[currentLang] || translations.it;
 
@@ -291,8 +293,11 @@ function setLanguage(lang, btn) {
 
   document.querySelector('[data-i18n="headerTitle"]').innerText = translations[currentLang].headerTitle;
   document.querySelector('[data-i18n="headerEdition"]').innerText = translations[currentLang].headerEdition;
-  document.querySelector('[data-i18n="badgeEco"]').innerText = translations[currentLang].badgeEco;
   
+  // Traduzione dinamica del badge progresso
+  const badgeProgress = document.querySelector('[data-i18n="badgeProgress"]');
+  if (badgeProgress) badgeProgress.innerText = translations[currentLang].badgeProgress;
+
   const shareLabel = document.querySelector('[data-i18n="btnShare"]');
   if (shareLabel) shareLabel.innerText = translations[currentLang].btnShare;
 
